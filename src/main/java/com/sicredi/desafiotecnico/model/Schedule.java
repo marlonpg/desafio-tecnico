@@ -11,7 +11,7 @@ public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
+	private String topic;
 
 	public Long getId() {
 		return id;
@@ -21,17 +21,17 @@ public class Schedule {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTopic() {
+		return topic;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTopic(String topic) {
+		this.topic = topic;
 	}
 
 	@Override
 	public String toString() {
-		return "Schedule [id=" + id + ", name=" + name + "]";
+		return "Schedule [id=" + id + ", topic=" + topic + "]";
 	}
 
 }
