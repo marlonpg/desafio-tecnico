@@ -20,6 +20,15 @@ public class Session {
 	@OneToOne
 	private Schedule schedule;
 	
+	public Session() {}
+	
+	public Session(LocalDateTime sessionStartTime, long sessionDuration, Schedule schedule) {
+		super();
+		this.sessionStartTime = sessionStartTime;
+		this.sessionDuration = sessionDuration;
+		this.schedule = schedule;
+	}
+
 	public Long getId() {
 		return id;
 	}

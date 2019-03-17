@@ -23,7 +23,7 @@ import javassist.NotFoundException;
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
-	private static final Logger logger = LogManager.getLogger(SessionController.class);
+	private static final Logger logger = LogManager.getLogger(ScheduleController.class);
 	private static final String CLASS_NAME = logger.getName();
 
 	@Autowired
@@ -47,8 +47,8 @@ public class ScheduleController {
 		}
 	}
 
-	@GetMapping("/result")
-	public ResponseEntity<String> getScheduleResult(@RequestBody Schedule schedule) {
+	@GetMapping("/{scheduleId}/result")
+	public ResponseEntity<String> getScheduleResult(@PathVariable Long scheduleId) {
 		// TODO: Compile the result with all votes.
 		return ResponseEntity.ok(Strings.EMPTY);
 	}
@@ -58,5 +58,4 @@ public class ScheduleController {
 		Schedule createdSchedule = scheduleService.createSchedule(schedule);
 		return ResponseEntity.ok(createdSchedule);
 	}
-
 }

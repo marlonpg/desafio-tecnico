@@ -13,6 +13,7 @@ public class Schedule {
 	private Long id;
 	private String topic;
 
+	
 	public Long getId() {
 		return id;
 	}
