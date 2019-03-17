@@ -30,14 +30,13 @@ public class VoteService {
 	@Autowired
 	private SessionService sessionService;
 
-	public void vote(Long scheduleId, VoteDto voteDto) throws NotFoundException {
+	public Vote vote(Long scheduleId, VoteDto voteDto) throws NotFoundException {
 		logger.info(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "vote", scheduleId, voteDto));
 
 		if (sessionService.isSessionAvailable(scheduleId) && isUserAbleToVote(scheduleId, voteDto.getUserCPF())) {
-
 			Schedule schedule = scheduleService.getSchedule(scheduleId);
 			Vote vote = new Vote(voteDto.getUserCPF(), convert(voteDto.getVote()), schedule);
-			voteRepository.save(vote);
+			return voteRepository.save(vote);
 		} else {
 			throw new NotFoundException("Session closed or the user have already voted.");
 		}
@@ -54,11 +53,15 @@ public class VoteService {
 	}
 
 	private Boolean convert(String vote) {
+		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "convert", vote));
+
 		Boolean result = null;
 		if (VOTE_SIM.contains(vote.toUpperCase())) {
 			result = true;
 		} else if (VOTE_NAO.contains(vote.toUpperCase())) {
 			result = false;
+		} else {
+			throw new IllegalArgumentException("Invalid vote string [" + vote + "], the vote must be 'SIM' or 'NÃO.");
 		}
 		return result;
 	}

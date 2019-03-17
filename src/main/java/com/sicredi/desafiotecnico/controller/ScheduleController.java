@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import com.sicredi.desafiotecnico.service.ScheduleService;
 import javassist.NotFoundException;
 
 @RestController
+@SuppressWarnings("rawtypes")
 @RequestMapping("/schedule")
 public class ScheduleController {
 	private static final Logger logger = LogManager.getLogger(ScheduleController.class);
@@ -35,12 +35,12 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/{scheduleId}")
-	public ResponseEntity<Schedule> getSchedule(@PathVariable Long scheduleId) {
+	public ResponseEntity getSchedule(@PathVariable Long scheduleId) {
 		try {
 			return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -48,9 +48,16 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/{scheduleId}/result")
-	public ResponseEntity<String> getScheduleResult(@PathVariable Long scheduleId) {
-		// TODO: Compile the result with all votes.
-		return ResponseEntity.ok(Strings.EMPTY);
+	public ResponseEntity getScheduleResult(@PathVariable Long scheduleId) {
+		try {
+			return ResponseEntity.ok(scheduleService.getScheduleResult(scheduleId));
+		} catch (NotFoundException e) {
+			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (Exception e) {
+			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@PostMapping

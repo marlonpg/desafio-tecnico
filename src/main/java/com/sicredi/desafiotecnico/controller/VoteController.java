@@ -1,7 +1,5 @@
 package com.sicredi.desafiotecnico.controller;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sicredi.desafiotecnico.dto.VoteDto;
-import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.service.VoteService;
 
 import javassist.NotFoundException;
 
 @RestController
+@SuppressWarnings("rawtypes")
 @RequestMapping("/schedule/{scheduleId}/vote")
 public class VoteController {
 	private static final Logger logger = LogManager.getLogger(VoteController.class);
@@ -30,13 +28,15 @@ public class VoteController {
 	private VoteService voteService;
 
 	@PostMapping
-	public ResponseEntity<String> vote(@PathVariable Long scheduleId, @RequestBody VoteDto voteDto) {
+	public ResponseEntity vote(@PathVariable Long scheduleId, @RequestBody VoteDto voteDto) {
 		try {
-			voteService.vote(scheduleId, voteDto);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(voteService.vote(scheduleId, voteDto));
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -45,13 +45,12 @@ public class VoteController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Vote>> getVotes(@PathVariable Long scheduleId) {
+	public ResponseEntity getVotes(@PathVariable Long scheduleId) {
 		try {
-			List<Vote> computedVotes = voteService.getVotes(scheduleId);
-			return ResponseEntity.ok(computedVotes);
+			return ResponseEntity.ok(voteService.getVotes(scheduleId));
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

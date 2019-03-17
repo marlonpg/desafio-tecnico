@@ -17,6 +17,7 @@ import com.sicredi.desafiotecnico.service.SessionService;
 import javassist.NotFoundException;
 
 @RestController
+@SuppressWarnings("rawtypes")
 @RequestMapping("/schedule/{scheduleId}/session")
 public class SessionController {
 	private static final Logger logger = LogManager.getLogger(SessionController.class);
@@ -26,13 +27,13 @@ public class SessionController {
 	private SessionService sessionService;
 
 	@GetMapping
-	public ResponseEntity<Session> getSession(@PathVariable Long scheduleId) {
+	public ResponseEntity getSession(@PathVariable Long scheduleId) {
 		try {
 			return ResponseEntity.ok(sessionService.getSession(scheduleId));
 
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -40,17 +41,16 @@ public class SessionController {
 	}
 
 	@PostMapping("/{durationInSeconds}")
-	public ResponseEntity<Session> createSession(@PathVariable Long scheduleId, @PathVariable Long durationInSeconds) {
+	public ResponseEntity createSession(@PathVariable Long scheduleId, @PathVariable Long durationInSeconds) {
 		try {
 			Session scheduleSession = sessionService.createSession(scheduleId, durationInSeconds);
 			return ResponseEntity.ok(scheduleSession);
-
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (IllegalArgumentException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

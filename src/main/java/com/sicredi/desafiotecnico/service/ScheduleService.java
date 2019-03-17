@@ -8,7 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sicredi.desafiotecnico.dto.ScheduleResult;
 import com.sicredi.desafiotecnico.model.Schedule;
+import com.sicredi.desafiotecnico.model.Session;
+import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.ScheduleRepository;
 
 import javassist.NotFoundException;
@@ -20,6 +23,12 @@ public class ScheduleService {
 
 	@Autowired
 	private ScheduleRepository scheduleRepository;
+
+	@Autowired
+	private SessionService sessionService;
+
+	@Autowired
+	private VoteService voteService;
 
 	public List<Schedule> getAllSchedules() {
 		logger.info(String.format("[%s.%s]", CLASS_NAME, "getAllSchedules"));
@@ -41,5 +50,16 @@ public class ScheduleService {
 		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSchedule", schedule));
 
 		return scheduleRepository.save(schedule);
+	}
+
+	public ScheduleResult getScheduleResult(Long scheduleId) throws NotFoundException {
+		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getScheduleResult", scheduleId));
+
+		Session session = sessionService.getSession(scheduleId);
+		List<Vote> votes = voteService.getVotes(scheduleId);
+		long countSim = votes.stream().filter(vote -> vote.getVote()).count();
+		long countNao = votes.size() - countSim;
+
+		return new ScheduleResult(session, countSim, countNao, votes);
 	}
 }
