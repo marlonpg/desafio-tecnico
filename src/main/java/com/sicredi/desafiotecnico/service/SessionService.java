@@ -11,7 +11,7 @@ import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.repository.SessionRepository;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
 public class SessionService {

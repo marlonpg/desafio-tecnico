@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sicredi.desafiotecnico.dto.VoteDto;
 import com.sicredi.desafiotecnico.service.VoteService;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @RestController
 @SuppressWarnings("rawtypes")

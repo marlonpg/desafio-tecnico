@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.service.ScheduleService;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @RestController
 @SuppressWarnings("rawtypes")

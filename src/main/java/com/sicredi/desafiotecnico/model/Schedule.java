@@ -13,7 +13,14 @@ public class Schedule {
 	private Long id;
 	private String topic;
 
+	public Schedule() {}
 	
+	public Schedule(Long id, String topic) {
+		super();
+		this.id = id;
+		this.topic = topic;
+	}
+
 	public Long getId() {
 		return id;
 	}

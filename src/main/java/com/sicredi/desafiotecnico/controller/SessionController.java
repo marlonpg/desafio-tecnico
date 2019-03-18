@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.service.SessionService;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @RestController
 @SuppressWarnings("rawtypes")

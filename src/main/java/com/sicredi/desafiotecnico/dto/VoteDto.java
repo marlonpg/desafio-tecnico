@@ -4,6 +4,14 @@ public class VoteDto {
 	private String userCPF;
 	private String vote;
 	
+	public VoteDto() {}
+	
+	public VoteDto(String userCPF, String vote) {
+		super();
+		this.userCPF = userCPF;
+		this.vote = vote;
+	}
+
 	public String getUserCPF() {
 		return userCPF;
 	}

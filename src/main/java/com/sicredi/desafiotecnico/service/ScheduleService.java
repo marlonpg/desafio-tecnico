@@ -14,7 +14,7 @@ import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.ScheduleRepository;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
 public class ScheduleService {

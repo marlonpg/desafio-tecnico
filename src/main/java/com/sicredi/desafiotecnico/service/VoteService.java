@@ -12,7 +12,7 @@ import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.VoteRepository;
 
-import javassist.NotFoundException;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
 public class VoteService {
@@ -52,13 +52,13 @@ public class VoteService {
 		return votes;
 	}
 
-	private Boolean convert(String vote) {
+	private boolean convert(String vote) {
 		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "convert", vote));
 
-		Boolean result = null;
-		if (VOTE_SIM.contains(vote.toUpperCase())) {
+		boolean result;
+		if (VOTE_SIM.equals(vote.toUpperCase())) {
 			result = true;
-		} else if (VOTE_NAO.contains(vote.toUpperCase())) {
+		} else if (VOTE_NAO.equals(vote.toUpperCase())) {
 			result = false;
 		} else {
 			throw new IllegalArgumentException("Invalid vote string [" + vote + "], the vote must be 'SIM' or 'NÃO.");
@@ -70,7 +70,6 @@ public class VoteService {
 		logger.info(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "isUserAbleToVote", scheduleId, userCPF));
 
 		Vote vote = voteRepository.findByScheduleIdAndUserCPF(scheduleId, userCPF);
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "isUserAbleToVote", vote));
 
 		return vote == null;
 	}
