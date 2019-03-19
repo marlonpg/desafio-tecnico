@@ -25,7 +25,7 @@ public class SessionService {
 	private ScheduleService scheduleService;
 
 	public Session getSession(Long scheduleId) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSession", scheduleId));
+		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSession", scheduleId));
 
 		Session session = sessionRepository.findByScheduleId(scheduleId);
 		if (session == null) {
@@ -35,7 +35,7 @@ public class SessionService {
 	}
 
 	public Session createSession(Long scheduleId, Long durationInSeconds) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "createSession", scheduleId, durationInSeconds));
+		logger.trace(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "createSession", scheduleId, durationInSeconds));
 
 		Session session = sessionRepository.findByScheduleId(scheduleId);
 		if (session != null && session.getSessionStartTime() != null) {
@@ -50,7 +50,7 @@ public class SessionService {
 	}
 
 	public boolean isSessionAvailable(Long scheduleId) {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "isSessionAvailable", scheduleId));
+		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "isSessionAvailable", scheduleId));
 
 		boolean isSessionAvailable = false;
 		try {

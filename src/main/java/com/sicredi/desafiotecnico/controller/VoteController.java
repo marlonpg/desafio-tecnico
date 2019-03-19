@@ -36,15 +36,16 @@ public class VoteController {
 
 	@PostMapping
 	@ApiOperation(value = "Create Vote", notes = "Service is used to create a vote in the schedule")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Vote has been created", response = Vote.class),
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Vote has been created", response = Vote.class),
 			@ApiResponse(code = 404, message = "Session closed or the user have already voted. / No Schedule found for id: XYZ"),
 			@ApiResponse(code = 400, message = "Invalid vote string [XYZ], the vote must be 'SIM' or 'NÃO."),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity vote(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId,
 			@ApiParam(name = "voteDto", value = "The Vote object", required = true) @RequestBody VoteDto voteDto) {
+		long startedTime = System.currentTimeMillis();
 		try {
-			return ResponseEntity.ok(voteService.vote(scheduleId, voteDto));
+			return ResponseEntity.status(HttpStatus.CREATED).body(voteService.vote(scheduleId, voteDto));
 		} catch (NotFoundException e) {
 			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -54,6 +55,8 @@ public class VoteController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 
 	}
@@ -65,6 +68,7 @@ public class VoteController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity getVotes(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			return ResponseEntity.ok(voteService.getVotes(scheduleId));
 		} catch (NotFoundException e) {
@@ -73,6 +77,8 @@ public class VoteController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 
 	}

@@ -38,6 +38,7 @@ public class SessionController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity getSession(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			return ResponseEntity.ok(sessionService.getSession(scheduleId));
 
@@ -47,6 +48,8 @@ public class SessionController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 	}
 
@@ -59,6 +62,7 @@ public class SessionController {
 	public ResponseEntity createSession(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId,
 			@ApiParam(name = "durationInSeconds", value = "The duration of the session in seconds", example = "60", required = true) @PathVariable Long durationInSeconds) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			Session scheduleSession = sessionService.createSession(scheduleId, durationInSeconds);
 			return ResponseEntity.status(HttpStatus.CREATED).body(scheduleSession);
@@ -71,6 +75,8 @@ public class SessionController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 
 	}

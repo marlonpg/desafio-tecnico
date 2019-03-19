@@ -41,6 +41,7 @@ public class ScheduleController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity getSchedule(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
 		} catch (NotFoundException e) {
@@ -49,6 +50,8 @@ public class ScheduleController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 	}
 
@@ -60,6 +63,7 @@ public class ScheduleController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity getScheduleResult(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			return ResponseEntity.ok(scheduleService.getScheduleResult(scheduleId));
 		} catch (NotFoundException e) {
@@ -68,6 +72,8 @@ public class ScheduleController {
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 	}
 
@@ -77,12 +83,15 @@ public class ScheduleController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<Schedule> createSchedule(
 			@ApiParam(name = "schedule", value = "The schedule object", required = true) @RequestBody Schedule schedule) {
+		long startedTime = System.currentTimeMillis();
 		try {
 			Schedule createdSchedule = scheduleService.createSchedule(schedule);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdSchedule);
 		} catch (Exception e) {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
 		}
 	}
 }

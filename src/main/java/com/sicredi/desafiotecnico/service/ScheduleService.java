@@ -31,7 +31,7 @@ public class ScheduleService {
 	private VoteService voteService;
 
 	public Schedule getSchedule(Long id) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", id));
+		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", id));
 
 		Optional<Schedule> schedule = scheduleRepository.findById(id);
 		if (!schedule.isPresent()) {
@@ -41,13 +41,13 @@ public class ScheduleService {
 	}
 
 	public Schedule createSchedule(Schedule schedule) {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSchedule", schedule));
+		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSchedule", schedule));
 
 		return scheduleRepository.save(schedule);
 	}
 
 	public ScheduleResult getScheduleResult(Long scheduleId) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getScheduleResult", scheduleId));
+		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getScheduleResult", scheduleId));
 
 		Session session = sessionService.getSession(scheduleId);
 		List<Vote> votes = voteService.getVotes(scheduleId);
