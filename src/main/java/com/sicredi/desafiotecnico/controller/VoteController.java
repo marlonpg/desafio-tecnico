@@ -17,6 +17,7 @@ import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.service.VoteService;
+import com.sicredi.desafiotecnico.util.Constants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +57,7 @@ public class VoteController {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 
 	}
@@ -78,7 +79,7 @@ public class VoteController {
 			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 
 	}

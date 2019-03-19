@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.service.SessionService;
+import com.sicredi.desafiotecnico.util.Constants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,13 +44,13 @@ public class SessionController {
 			return ResponseEntity.ok(sessionService.getSession(scheduleId));
 
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSession", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 	}
 
@@ -67,16 +68,16 @@ public class SessionController {
 			Session scheduleSession = sessionService.createSession(scheduleId, durationInSeconds);
 			return ResponseEntity.status(HttpStatus.CREATED).body(scheduleSession);
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSession", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSession", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSession", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 
 	}

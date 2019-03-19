@@ -13,7 +13,7 @@ import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.ScheduleRepository;
-
+import com.sicredi.desafiotecnico.util.Constants;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
@@ -31,7 +31,7 @@ public class ScheduleService {
 	private VoteService voteService;
 
 	public Schedule getSchedule(Long id) throws NotFoundException {
-		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", id));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", id));
 
 		Optional<Schedule> schedule = scheduleRepository.findById(id);
 		if (!schedule.isPresent()) {
@@ -41,13 +41,13 @@ public class ScheduleService {
 	}
 
 	public Schedule createSchedule(Schedule schedule) {
-		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "createSchedule", schedule));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule", schedule));
 
 		return scheduleRepository.save(schedule);
 	}
 
 	public ScheduleResult getScheduleResult(Long scheduleId) throws NotFoundException {
-		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getScheduleResult", scheduleId));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", scheduleId));
 
 		Session session = sessionService.getSession(scheduleId);
 		List<Vote> votes = voteService.getVotes(scheduleId);

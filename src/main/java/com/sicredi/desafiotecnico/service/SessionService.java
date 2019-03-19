@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Session;
 import com.sicredi.desafiotecnico.repository.SessionRepository;
-
+import com.sicredi.desafiotecnico.util.Constants;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class SessionService {
 	private ScheduleService scheduleService;
 
 	public Session getSession(Long scheduleId) throws NotFoundException {
-		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSession", scheduleId));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSession", scheduleId));
 
 		Session session = sessionRepository.findByScheduleId(scheduleId);
 		if (session == null) {
@@ -35,7 +35,7 @@ public class SessionService {
 	}
 
 	public Session createSession(Long scheduleId, Long durationInSeconds) throws NotFoundException {
-		logger.trace(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "createSession", scheduleId, durationInSeconds));
+		logger.trace(String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "createSession", scheduleId, durationInSeconds));
 
 		Session session = sessionRepository.findByScheduleId(scheduleId);
 		if (session != null && session.getSessionStartTime() != null) {
@@ -50,7 +50,7 @@ public class SessionService {
 	}
 
 	public boolean isSessionAvailable(Long scheduleId) {
-		logger.trace(String.format("[%s.%s] - [%s]", CLASS_NAME, "isSessionAvailable", scheduleId));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "isSessionAvailable", scheduleId));
 
 		boolean isSessionAvailable = false;
 		try {
@@ -59,7 +59,7 @@ public class SessionService {
 			LocalDateTime finishAt = localDateTime.plusSeconds(session.getSessionDuration());
 			isSessionAvailable = LocalDateTime.now().isBefore(finishAt);
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "isSessionAvailable", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "isSessionAvailable", e.getMessage()));
 		}
 		return isSessionAvailable;
 	}

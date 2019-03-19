@@ -16,6 +16,7 @@ import com.sicredi.desafiotecnico.dto.ScheduleResult;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.service.ScheduleService;
+import com.sicredi.desafiotecnico.util.Constants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,13 +46,13 @@ public class ScheduleController {
 		try {
 			return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 	}
 
@@ -67,13 +68,13 @@ public class ScheduleController {
 		try {
 			return ResponseEntity.ok(scheduleService.getScheduleResult(scheduleId));
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 	}
 
@@ -88,10 +89,10 @@ public class ScheduleController {
 			Schedule createdSchedule = scheduleService.createSchedule(schedule);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdSchedule);
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", "Service took [" + (System.currentTimeMillis() - startedTime)/1000.00 + "] seconds"));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 	}
 }
