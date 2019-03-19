@@ -2,26 +2,29 @@ package com.sicredi.desafiotecnico.dto;
 
 public class VoteDto {
 	private String userCPF;
-	private String vote;
+	private String userVote;
 	
 	public VoteDto() {}
-	
-	public VoteDto(String userCPF, String vote) {
+
+	public VoteDto(String userCPF, String userVote) {
 		super();
 		this.userCPF = userCPF;
-		this.vote = vote;
+		this.userVote = userVote;
 	}
 
 	public String getUserCPF() {
 		return userCPF;
 	}
+
 	public void setUserCPF(String userCPF) {
 		this.userCPF = userCPF;
 	}
-	public String getVote() {
-		return vote;
+
+	public String getUserVote() {
+		return userVote;
 	}
-	public void setVote(String vote) {
-		this.vote = vote;
+
+	public void setUserVote(String userVote) {
+		this.userVote = userVote;
 	}
 }

@@ -25,15 +25,15 @@ public class Vote {
 	@JoinColumn(name = "scheduleId", insertable = false, updatable = false)
 	private Schedule schedule;
 
-	private boolean vote;
+	private boolean userVote;
 	
 	public Vote() {
 	}
 
-	public Vote(String userCPF, boolean vote, Schedule schedule) {
+	public Vote(String userCPF, boolean userVote, Schedule schedule) {
 		super();
 		this.userCPF = userCPF;
-		this.vote = vote;
+		this.userVote = userVote;
 		this.schedule = schedule;
 	}
 
@@ -45,12 +45,12 @@ public class Vote {
 		this.userCPF = userCPF;
 	}
 
-	public boolean getVote() {
-		return vote;
+	public boolean getUserVote() {
+		return userVote;
 	}
 
-	public void setVote(boolean vote) {
-		this.vote = vote;
+	public void setUserVote(boolean userVote) {
+		this.userVote = userVote;
 	}
 
 	public Schedule getSchedule() {
@@ -63,7 +63,7 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [userCPF=" + userCPF + ", schedule=" + schedule + ", vote=" + vote + "]";
+		return "Vote [userCPF=" + userCPF + ", schedule=" + schedule + ", userVote=" + userVote + "]";
 	}
 
 	

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sicredi.desafiotecnico.dto.ScheduleDto;
 import com.sicredi.desafiotecnico.dto.ScheduleResult;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 import com.sicredi.desafiotecnico.model.Schedule;
@@ -52,7 +53,8 @@ public class ScheduleController {
 			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getSchedule",
+					String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime) / 1000.00)));
 		}
 	}
 
@@ -71,10 +73,12 @@ public class ScheduleController {
 			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", e.getMessage()));
+			logger.error(
+					String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getScheduleResult",
+					String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime) / 1000.00)));
 		}
 	}
 
@@ -83,16 +87,17 @@ public class ScheduleController {
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Schedule has been created", response = Schedule.class),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<Schedule> createSchedule(
-			@ApiParam(name = "schedule", value = "The schedule object", required = true) @RequestBody Schedule schedule) {
+			@ApiParam(name = "schedule", value = "The schedule object", required = true) @RequestBody ScheduleDto scheduleDto) {
 		long startedTime = System.currentTimeMillis();
 		try {
-			Schedule createdSchedule = scheduleService.createSchedule(schedule);
+			Schedule createdSchedule = scheduleService.createSchedule(scheduleDto);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdSchedule);
 		} catch (Exception e) {
 			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "createSchedule",
+					String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime) / 1000.00)));
 		}
 	}
 }

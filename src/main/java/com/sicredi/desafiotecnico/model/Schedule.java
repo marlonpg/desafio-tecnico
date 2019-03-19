@@ -15,6 +15,11 @@ public class Schedule {
 
 	public Schedule() {}
 	
+	public Schedule(String topic) {
+		super();
+		this.topic = topic;
+	}
+
 	public Schedule(Long id, String topic) {
 		super();
 		this.id = id;

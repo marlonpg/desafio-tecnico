@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.sicredi.desafiotecnico.dto.VoteDto;
 import com.sicredi.desafiotecnico.model.Schedule;
@@ -36,7 +37,7 @@ public class VoteService {
 
 		if (sessionService.isSessionAvailable(scheduleId) && isUserAbleToVote(scheduleId, voteDto.getUserCPF())) {
 			Schedule schedule = scheduleService.getSchedule(scheduleId);
-			Vote vote = new Vote(voteDto.getUserCPF(), convert(voteDto.getVote()), schedule);
+			Vote vote = new Vote(voteDto.getUserCPF(), convert(voteDto.getUserVote()), schedule);
 			return voteRepository.save(vote);
 		} else {
 			throw new NotFoundException("Session closed or the user have already voted.");
@@ -47,7 +48,7 @@ public class VoteService {
 		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getVotes", scheduleId));
 
 		List<Vote> votes = voteRepository.findByScheduleId(scheduleId);
-		if (votes == null) {
+		if (CollectionUtils.isEmpty(votes)) {
 			throw new NotFoundException("No Votes found by this ScheduleId: " + scheduleId);
 		}
 		return votes;

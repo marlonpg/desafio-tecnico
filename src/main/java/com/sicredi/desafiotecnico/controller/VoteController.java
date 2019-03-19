@@ -48,16 +48,16 @@ public class VoteController {
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(voteService.vote(scheduleId, voteDto));
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "vote", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "vote", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "vote", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 
 	}
@@ -73,13 +73,13 @@ public class VoteController {
 		try {
 			return ResponseEntity.ok(voteService.getVotes(scheduleId));
 		} catch (NotFoundException e) {
-			logger.warn(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
+			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getVotes", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
-			logger.error(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", e.getMessage()));
+			logger.error(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getVotes", e.getMessage()));
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
+			logger.info(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getVotes", String.format(Constants.LOG_RESPONSE_TIME, (System.currentTimeMillis() - startedTime)/1000.00)));
 		}
 
 	}
