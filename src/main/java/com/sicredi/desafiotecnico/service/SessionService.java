@@ -35,7 +35,8 @@ public class SessionService {
 	}
 
 	public Session createSession(Long scheduleId, Long durationInSeconds) throws NotFoundException {
-		logger.trace(String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "createSession", scheduleId, durationInSeconds));
+		logger.trace(String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "createSession", scheduleId,
+				durationInSeconds));
 
 		Session session = sessionRepository.findByScheduleId(scheduleId);
 		if (session != null && session.getSessionStartTime() != null) {
@@ -49,19 +50,13 @@ public class SessionService {
 		return session;
 	}
 
-	public boolean isSessionAvailable(Long scheduleId) {
+	public boolean isSessionAvailable(Long scheduleId) throws NotFoundException {
 		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "isSessionAvailable", scheduleId));
 
-		boolean isSessionAvailable = false;
-		try {
-			Session session = getSession(scheduleId);
-			LocalDateTime localDateTime = session.getSessionStartTime();
-			LocalDateTime finishAt = localDateTime.plusSeconds(session.getSessionDuration());
-			isSessionAvailable = LocalDateTime.now().isBefore(finishAt);
-		} catch (NotFoundException e) {
-			logger.warn(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "isSessionAvailable", e.getMessage()));
-		}
-		return isSessionAvailable;
+		Session session = getSession(scheduleId);
+		LocalDateTime localDateTime = session.getSessionStartTime();
+		LocalDateTime finishAt = localDateTime.plusSeconds(session.getSessionDuration());
+		return LocalDateTime.now().isBefore(finishAt);
 	}
 
 }

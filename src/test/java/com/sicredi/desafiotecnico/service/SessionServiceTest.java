@@ -61,15 +61,7 @@ public class SessionServiceTest {
 	}
 
 	@Test
-	public void isSessionAvailable_shouldBeFalse_whenSessionNotFound() {
-		when(sessionRepository.findByScheduleId(Mockito.anyLong())).thenReturn(null);
-
-		boolean result = sessionService.isSessionAvailable(Mockito.anyLong());
-		assertFalse("Session should not be available: ", result);
-	}
-
-	@Test
-	public void isSessionAvailable_shouldBeFalse_whenSessionIsDone() {
+	public void isSessionAvailable_shouldBeFalse_whenSessionIsDone() throws NotFoundException {
 		session.setSessionStartTime(LocalDateTime.MIN);
 		when(sessionRepository.findByScheduleId(Mockito.anyLong())).thenReturn(session);
 
@@ -78,7 +70,7 @@ public class SessionServiceTest {
 	}
 
 	@Test
-	public void isSessionAvailable_shouldBeTrue_whenSessionIsOpen() {
+	public void isSessionAvailable_shouldBeTrue_whenSessionIsOpen() throws NotFoundException {
 		session.setSessionStartTime(LocalDateTime.now());
 		when(sessionRepository.findByScheduleId(Mockito.anyLong())).thenReturn(session);
 
