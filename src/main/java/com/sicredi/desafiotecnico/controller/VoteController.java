@@ -38,8 +38,8 @@ public class VoteController {
 	@PostMapping
 	@ApiOperation(value = "Create Vote", notes = "Service is used to create a vote in the schedule")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Vote has been created", response = Vote.class),
-			@ApiResponse(code = 404, message = "Session closed or the user have already voted. / No Schedule found for id: XYZ"),
-			@ApiResponse(code = 400, message = "Invalid vote string [XYZ], the vote must be 'SIM' or 'NÃO."),
+			@ApiResponse(code = 404, message = "Session closed or the user have already voted. \n No Schedule found for id: XYZ"),
+			@ApiResponse(code = 400, message = "Invalid vote string [XYZ], the vote must be 'SIM' or 'NÃO. \n Invalid CPF, it can't be blank/null. \n Invalid CPF, it must have 11 character [XYZ]. \n This CPF [XYZ] is unable to vote."),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity vote(
 			@ApiParam(name = "scheduleId", value = "The id of the schedule", example = "1", required = true) @PathVariable Long scheduleId,

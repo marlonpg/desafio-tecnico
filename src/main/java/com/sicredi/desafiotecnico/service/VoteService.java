@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.sicredi.desafiotecnico.dto.VoteDto;
+import com.sicredi.desafiotecnico.exceptions.NotFoundException;
+import com.sicredi.desafiotecnico.facades.UserVotePermissionFacade;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.VoteRepository;
 import com.sicredi.desafiotecnico.util.Constants;
-import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
 public class VoteService {
@@ -29,6 +30,9 @@ public class VoteService {
 
 	@Autowired
 	private SessionService sessionService;
+
+	@Autowired
+	private UserVotePermissionFacade userVotePermissionFacade;
 
 	public Vote vote(Long scheduleId, VoteDto voteDto) throws NotFoundException {
 		logger.trace(String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "vote", scheduleId, voteDto));
@@ -80,8 +84,12 @@ public class VoteService {
 	private void validateUserCPF(String userCPF) {
 		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "validateUserCPF", userCPF));
 
-		if (StringUtils.isBlank(userCPF) || userCPF.length() != Constants.CPF_LENGTH) {
-			throw new IllegalArgumentException("Invalid CPF [" + userCPF + "], the CPF must have 11 character.");
+		if (StringUtils.isBlank(userCPF)) {
+			throw new IllegalArgumentException("Invalid CPF, it can't be blank/null.");
+		} else if (userCPF.length() != Constants.CPF_LENGTH) {
+			throw new IllegalArgumentException("Invalid CPF, it must have 11 character [" + userCPF + "].");
+		} else if (!userVotePermissionFacade.isUserAbleToVote(userCPF)) {
+			throw new IllegalArgumentException("This CPF [" + userCPF + "] is unable to vote.");
 		}
 	}
 }
