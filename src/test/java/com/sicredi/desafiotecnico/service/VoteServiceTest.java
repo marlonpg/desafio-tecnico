@@ -3,9 +3,6 @@ package com.sicredi.desafiotecnico.service;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,8 +41,8 @@ public class VoteServiceTest {
 	@Before
 	public void setUp() {
 		invalidVote = new VoteDto("02132154355", "YES");
-		validVoteSIM = new VoteDto("02132154355", "SIM");
-		validVoteNAO = new VoteDto("02132154355", "NÃO");
+		validVoteSIM = new VoteDto("02132154355", VOTE_SIM);
+		validVoteNAO = new VoteDto("02132154355", VOTE_NAO);
 	}
 	
 	@Test(expected = NotFoundException.class)

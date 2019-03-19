@@ -68,8 +68,8 @@ public class ScheduleServiceTest {
 
 		ScheduleResult scheduleResult = scheduleService.getScheduleResult(Mockito.anyLong());
 
-		assertEquals("Result must have SIM ", 2L, scheduleResult.getTotalVotesSim());
-		assertEquals("Result must have NÃO ", 2L, scheduleResult.getTotalVotesNao());
+		assertEquals("Result must have 3 SIM ", 3L, scheduleResult.getTotalVotesSim());
+		assertEquals("Result must have 1 NÃO ", 1L, scheduleResult.getTotalVotesNao());
 	}
 }
 

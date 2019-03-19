@@ -30,12 +30,6 @@ public class ScheduleService {
 	@Autowired
 	private VoteService voteService;
 
-	public List<Schedule> getAllSchedules() {
-		logger.info(String.format("[%s.%s]", CLASS_NAME, "getAllSchedules"));
-
-		return (List<Schedule>) scheduleRepository.findAll();
-	}
-
 	public Schedule getSchedule(Long id) throws NotFoundException {
 		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getSchedule", id));
 
