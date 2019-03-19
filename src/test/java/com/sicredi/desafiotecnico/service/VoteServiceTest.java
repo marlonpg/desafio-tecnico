@@ -16,11 +16,10 @@ import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.VoteRepository;
+import com.sicredi.desafiotecnico.util.Constants;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VoteServiceTest {
-	private static final String VOTE_SIM = "SIM";
-	private static final String VOTE_NAO = "NÃO";
 
 	@InjectMocks
 	private VoteService voteService;
@@ -41,15 +40,15 @@ public class VoteServiceTest {
 	@Before
 	public void setUp() {
 		invalidVote = new VoteDto("02132154355", "YES");
-		validVoteSIM = new VoteDto("02132154355", VOTE_SIM);
-		validVoteNAO = new VoteDto("02132154355", VOTE_NAO);
+		validVoteSIM = new VoteDto("02132154355", Constants.VOTE_SIM);
+		validVoteNAO = new VoteDto("02132154355", Constants.VOTE_NAO);
 	}
 	
 	@Test(expected = NotFoundException.class)
 	public void vote_throwException_whenSessionIsNotAvailable() throws NotFoundException {
 		when(sessionService.isSessionAvailable(Mockito.anyLong())).thenReturn(false);
 
-		voteService.vote(Mockito.anyLong(), new VoteDto());
+		voteService.vote(Mockito.anyLong(), validVoteSIM);
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -94,5 +93,22 @@ public class VoteServiceTest {
 		when(voteRepository.findByScheduleId(Mockito.anyLong())).thenReturn(null);
 		
 		voteService.getVotes(Mockito.anyLong());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void vote_throwException_whenCPFBlank() throws NotFoundException {
+		voteService.vote(1000L, new VoteDto());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void vote_throwException_whenCPFLengthIsLessThan11Characters() throws NotFoundException {
+		VoteDto invalidCPFLessThan11 = new VoteDto("123456789", Constants.VOTE_SIM);
+		voteService.vote(1000L, invalidCPFLessThan11);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void vote_throwException_whenCPFLengthIsGreaterThan11Characters() throws NotFoundException {
+		VoteDto invalidCPFGreaterThan11 = new VoteDto("123456789101112", Constants.VOTE_SIM);
+		voteService.vote(1000L, invalidCPFGreaterThan11);
 	}
 }

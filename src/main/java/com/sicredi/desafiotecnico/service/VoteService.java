@@ -2,6 +2,7 @@ package com.sicredi.desafiotecnico.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,13 @@ import com.sicredi.desafiotecnico.dto.VoteDto;
 import com.sicredi.desafiotecnico.model.Schedule;
 import com.sicredi.desafiotecnico.model.Vote;
 import com.sicredi.desafiotecnico.repository.VoteRepository;
-
+import com.sicredi.desafiotecnico.util.Constants;
 import com.sicredi.desafiotecnico.exceptions.NotFoundException;
 
 @Service
 public class VoteService {
 	private static final Logger logger = LogManager.getLogger(VoteService.class);
 	private static final String CLASS_NAME = logger.getName();
-	private static final String VOTE_SIM = "SIM";
-	private static final String VOTE_NAO = "NÃO";
 
 	@Autowired
 	private VoteRepository voteRepository;
@@ -31,7 +30,9 @@ public class VoteService {
 	private SessionService sessionService;
 
 	public Vote vote(Long scheduleId, VoteDto voteDto) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "vote", scheduleId, voteDto));
+		logger.trace(String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "vote", scheduleId, voteDto));
+
+		validateUserCPF(voteDto.getUserCPF());
 
 		if (sessionService.isSessionAvailable(scheduleId) && isUserAbleToVote(scheduleId, voteDto.getUserCPF())) {
 			Schedule schedule = scheduleService.getSchedule(scheduleId);
@@ -43,7 +44,7 @@ public class VoteService {
 	}
 
 	public List<Vote> getVotes(Long scheduleId) throws NotFoundException {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "getVotes", scheduleId));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "getVotes", scheduleId));
 
 		List<Vote> votes = voteRepository.findByScheduleId(scheduleId);
 		if (votes == null) {
@@ -53,12 +54,12 @@ public class VoteService {
 	}
 
 	private boolean convert(String vote) {
-		logger.info(String.format("[%s.%s] - [%s]", CLASS_NAME, "convert", vote));
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "convert", vote));
 
 		boolean result;
-		if (VOTE_SIM.equals(vote.toUpperCase())) {
+		if (Constants.VOTE_SIM.equalsIgnoreCase(vote)) {
 			result = true;
-		} else if (VOTE_NAO.equals(vote.toUpperCase())) {
+		} else if (Constants.VOTE_NAO.equalsIgnoreCase(vote)) {
 			result = false;
 		} else {
 			throw new IllegalArgumentException("Invalid vote string [" + vote + "], the vote must be 'SIM' or 'NÃO.");
@@ -67,11 +68,19 @@ public class VoteService {
 	}
 
 	private boolean isUserAbleToVote(Long scheduleId, String userCPF) {
-		logger.info(String.format("[%s.%s] - [%s] - [%s]", CLASS_NAME, "isUserAbleToVote", scheduleId, userCPF));
+		logger.trace(
+				String.format(Constants.LOG_MESSAGE_2_PARAMS, CLASS_NAME, "isUserAbleToVote", scheduleId, userCPF));
 
 		Vote vote = voteRepository.findByScheduleIdAndUserCPF(scheduleId, userCPF);
 
 		return vote == null;
 	}
 
+	private void validateUserCPF(String userCPF) {
+		logger.trace(String.format(Constants.LOG_MESSAGE_1_PARAMS, CLASS_NAME, "validateUserCPF", userCPF));
+
+		if (StringUtils.isBlank(userCPF) || userCPF.length() != Constants.CPF_LENGTH) {
+			throw new IllegalArgumentException("Invalid CPF [" + userCPF + "], the CPF must have 11 character.");
+		}
+	}
 }
