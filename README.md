@@ -1,4 +1,4 @@
-# desafio-tecnico
+# technical-challenge
 
 This project was a technical challenge proposed by Sicredi.
 
